@@ -1,2 +1,17 @@
 notes/
-__pycache__/
+
+# ignore all logs
+*.log
+
+# ignore pycache
+*__pycache__
+
+# ignore pth
+*.pth
+
+# ignore data
+*.npy
+*.png
+
+# ignore jupyter jopascripts
+*.ipynb_checkpoints*
