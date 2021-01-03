@@ -116,4 +116,38 @@ if __name__ == "__main__":
         classes=1,
         activation=None
     )
+    # we normalize images
+    prepFn = smp.encoders.get_preprocessing_fn(
+        ENCODER,
+        ENCODER_WEIGHTS
+    )
+    # send model to device
+    model.to(DEVICE)
+    # init training dataset, with transform true
+    trainDataset = SIIMDataset(
+        trainingImages,
+        transform=True,
+        preprocessingFn=prepFn
+    )
+    # wrap in torch dataloader
+    trainLoader = torch.utils.data.DataLoader(
+        trainDataset,
+        batch_size=TRAINING_BATCH_SIZE,
+        shuffle=True,
+        num_workers=4
+    )
+    # init validation dataset, aug is disabled
+    validDataset = SIIMDataset(
+        validationImages,
+        transform=False,
+        preprocessingFn=prepFn
+    )
+    # wrap in torch dataloader
+    validLoader = torch.utils.data.DataLoader(
+        validDataset,
+        batch_size=TEST_BATCH_SIZE,
+        shuffle=True,
+        num_workers=4
+    )
+    # define criterion 
     
