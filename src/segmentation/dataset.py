@@ -12,9 +12,9 @@ from rle import run_length_decode
 
 
 class SIIMDataset(Dataset):
-    def __init__(self, df, dataFolder, size, mean, std, phase):
+    def __init__(self, df, data_folder, size, mean, std, phase):
         self.df = df
-        self.root = dataFolder
+        self.root = data_folder
         self.size = size
         self.mean = mean
         self.std = std
@@ -83,7 +83,7 @@ def get_transforms(phase, size, mean, std):
 def provider(
     fold,
     total_folds,
-    dataFolder,
+    data_folder,
     df_path,
     phase,
     size,
@@ -94,9 +94,9 @@ def provider(
 ):
     df = pd.read_csv(df_path)
     #     df = df.drop_duplicates('ImageId')
-    df_with_mask = df[df[" EncodedPixels"] != " -1"]
+    df_with_mask = df[df["EncodedPixels"] != " -1"]
     df_with_mask["has_mask"] = 1
-    df_without_mask = df[df[" EncodedPixels"] == " -1"]
+    df_without_mask = df[df["EncodedPixels"] == " -1"]
     df_without_mask["has_mask"] = 0
     df_without_mask_sampled = df_without_mask.sample(
         len(df_with_mask.drop_duplicates("ImageId"))
@@ -109,7 +109,7 @@ def provider(
     df = train_df if phase == "train" else val_df
     # NOTE: total_folds=5 -> train/val : 80%/20%
 
-    image_dataset = SIIMDataset(df, dataFolder, size, mean, std, phase)
+    image_dataset = SIIMDataset(df, data_folder, size, mean, std, phase)
 
     dataloader = DataLoader(
         image_dataset,
